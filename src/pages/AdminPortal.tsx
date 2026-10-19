@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import Header from '../components/Header';
 import { supabase } from '../lib/supabase';
+import * as XLSX from 'xlsx';
 import {
   Lock,
   Mail,
@@ -19,6 +20,8 @@ import {
   Globe,
   TrendingUp,
   UserCircle,
+  Database,
+  ExternalLink,
 } from 'lucide-react';
 
 interface AdminPortalProps {
@@ -195,6 +198,37 @@ export default function AdminPortal({ onBack }: AdminPortalProps) {
     setFiltered([]);
   };
 
+  const exportExcel = () => {
+    const rows = filtered.map((r) => ({
+      Nombre: r.nombre,
+      Correo: r.correo,
+      'Fecha Nacimiento': new Date(r.fecha_nacimiento).toLocaleDateString('es-CL'),
+      Genero: r.genero,
+      Region: r.region,
+      Ciudad: r.ciudad,
+      Pais: r.pais,
+      Registrado: new Date(r.created_at).toLocaleString('es-CL'),
+    }));
+    const sheet = XLSX.utils.json_to_sheet(rows);
+    sheet['!cols'] = [
+      { wch: 28 }, { wch: 30 }, { wch: 18 }, { wch: 12 },
+      { wch: 24 }, { wch: 20 }, { wch: 14 }, { wch: 20 },
+    ];
+    const book = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(book, sheet, 'Registros');
+    XLSX.writeFile(book, `registros_${new Date().toISOString().split('T')[0]}.xlsx`);
+  };
+
+  const openSupabase = () => {
+    const projectRef = import.meta.env.VITE_SUPABASE_URL as string | undefined;
+    const match = projectRef?.match(/https:\/\/(.+?)\.supabase\.co/);
+    if (match?.[1]) {
+      window.open(`https://supabase.com/dashboard/project/${match[1]}/editor`, '_blank', 'noopener');
+    } else {
+      window.open('https://supabase.com/dashboard', '_blank', 'noopener');
+    }
+  };
+
   const exportCsv = () => {
     const headers = [
       'Nombre',
@@ -323,6 +357,13 @@ export default function AdminPortal({ onBack }: AdminPortalProps) {
               />
             </div>
             <button
+              onClick={exportExcel}
+              disabled={filtered.length === 0}
+              className="flex items-center gap-2 bg-emerald-500/15 border border-emerald-500/40 text-emerald-400 font-bold px-4 py-3 rounded-xl hover:bg-emerald-500/25 transition active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed text-sm whitespace-nowrap"
+            >
+              <Download size={16} /> Excel
+            </button>
+            <button
               onClick={exportCsv}
               disabled={filtered.length === 0}
               className="flex items-center gap-2 bg-tradelearn-gold text-tradelearn-navy font-bold px-4 py-3 rounded-xl hover:bg-tradelearn-accent transition active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed text-sm whitespace-nowrap"
@@ -330,6 +371,23 @@ export default function AdminPortal({ onBack }: AdminPortalProps) {
               <Download size={16} /> CSV
             </button>
           </div>
+
+          {/* Supabase direct access */}
+          <button
+            onClick={openSupabase}
+            className="w-full mb-4 flex items-center justify-between bg-tradelearn-dark rounded-xl px-4 py-4 border border-tradelearn-blue/40 hover:border-tradelearn-blue transition group"
+          >
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-xl bg-tradelearn-blue/10 border border-tradelearn-blue/40 flex items-center justify-center flex-shrink-0">
+                <Database size={20} className="text-tradelearn-blue" />
+              </div>
+              <div className="text-left">
+                <p className="font-bold text-white text-sm">Base de datos Supabase</p>
+                <p className="text-xs text-slate-400">Abrir panel con tablas, editor y exportacion</p>
+              </div>
+            </div>
+            <ExternalLink size={16} className="text-tradelearn-blue group-hover:translate-x-0.5 transition-transform" />
+          </button>
 
           {/* Records */}
           {error && (

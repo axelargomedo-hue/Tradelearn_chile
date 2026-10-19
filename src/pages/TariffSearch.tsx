@@ -1,5 +1,7 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Header from '../components/Header';
+import { Loader2 } from 'lucide-react';
+import { supabase } from '../lib/supabase';
 
 interface Tariff {
   code: string;
@@ -9,7 +11,7 @@ interface Tariff {
   umeasure: string;
 }
 
-const TARIFF_DATA: Tariff[] = [
+const FALLBACK_TARIFFS: Tariff[] = [
   { code: '0101.21.00', description: 'Caballos vivos reproductores de pura raza', rate: '6%', tlcs: '0% (UE, USA, China)', umeasure: 'Unidad' },
   { code: '0201.10.00', description: 'Carne de bovino en canales, fresca o refrigerada', rate: '6%', tlcs: '0% (UE, USA)', umeasure: 'Kg' },
   { code: '0302.11.00', description: 'Truchas frescas o refrigeradas', rate: '0%', tlcs: '0% (todos)', umeasure: 'Kg' },
@@ -29,6 +31,20 @@ const TARIFF_DATA: Tariff[] = [
   { code: '8703.23.00', description: 'Automóviles con motor de émbolo 1500–3000cc', rate: '6%', tlcs: '0% (UE, USA)', umeasure: 'Unidad' },
 ];
 
+function rateToLabel(rate: number): string {
+  const formatted = Number.isInteger(rate) ? String(rate) : rate.toFixed(1);
+  return `${formatted}%`;
+}
+
+export async function logSearch(term: string, resultsCount: number) {
+  const clean = term.trim().slice(0, 120);
+  if (!clean) return;
+  await supabase.from('search_history').insert({
+    term: clean,
+    results_count: resultsCount,
+  });
+}
+
 interface TariffSearchProps {
   onBack: () => void;
 }
@@ -36,14 +52,59 @@ interface TariffSearchProps {
 export default function TariffSearch({ onBack }: TariffSearchProps) {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedTariff, setSelectedTariff] = useState<Tariff | null>(null);
+  const [tariffs, setTariffs] = useState<Tariff[]>(FALLBACK_TARIFFS);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    const load = async () => {
+      const { data, error } = await supabase
+        .from('tariff_items')
+        .select('code, description, rate, tlcs, unit_measure')
+        .order('code', { ascending: true });
+
+      if (cancelled) return;
+
+      if (!error && data && data.length > 0) {
+        setTariffs(
+          data.map((row) => ({
+            code: row.code,
+            description: row.description,
+            rate: rateToLabel(Number(row.rate)),
+            tlcs: row.tlcs,
+            umeasure: row.unit_measure,
+          })),
+        );
+      }
+      setLoading(false);
+    };
+
+    load();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   const filtered = searchTerm.trim() === ''
-    ? TARIFF_DATA
-    : TARIFF_DATA.filter(
+    ? tariffs
+    : tariffs.filter(
         (t) =>
           t.code.includes(searchTerm) ||
           t.description.toLowerCase().includes(searchTerm.toLowerCase())
       );
+
+  const handleSearchChange = (value: string) => {
+    setSearchTerm(value);
+    const trimmed = value.trim();
+    if (trimmed.length >= 3) {
+      logSearch(trimmed, tariffs.filter(
+        (t) =>
+          t.code.includes(trimmed) ||
+          t.description.toLowerCase().includes(trimmed.toLowerCase())
+      ).length);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-tradelearn-navy pb-24">
@@ -55,44 +116,51 @@ export default function TariffSearch({ onBack }: TariffSearchProps) {
           type="text"
           placeholder="Código (ej: 2204) o palabra clave…"
           value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
+          onChange={(e) => handleSearchChange(e.target.value)}
           className="w-full bg-tradelearn-navy text-white placeholder-slate-400 rounded-lg px-4 py-3 border-2 border-tradelearn-gold/30 focus:border-tradelearn-gold focus:outline-none transition"
         />
       </div>
 
       {/* Results */}
       <div className="px-4 py-4">
-        {filtered.length === 0 ? (
+        {loading && (
+          <div className="flex justify-center py-8">
+            <Loader2 size={28} className="animate-spin text-tradelearn-gold" />
+          </div>
+        )}
+        {!loading && filtered.length === 0 ? (
           <div className="text-center py-12">
             <p className="text-2xl mb-2">🔍</p>
             <p className="text-slate-300">Sin resultados para "{searchTerm}"</p>
             <p className="text-slate-400 text-sm mt-2">Intenta con otro término o código</p>
           </div>
         ) : (
-          <div className="space-y-3">
-            {filtered.map((tariff) => (
-              <button
-                key={tariff.code}
-                onClick={() => setSelectedTariff(tariff)}
-                className="w-full text-left bg-tradelearn-navy border-l-4 border-tradelearn-gold rounded-lg p-4 hover:bg-slate-800 transition"
-              >
-                <div className="flex items-start justify-between">
-                  <div className="flex-1">
-                    <p className="font-bold text-tradelearn-gold">{tariff.code}</p>
-                    <p className="text-sm text-slate-300 mt-1">{tariff.description}</p>
-                    <div className="flex gap-2 mt-3 flex-wrap">
-                      <span className="text-xs bg-tradelearn-gold/20 text-tradelearn-gold px-2 py-1 rounded">
-                        Arancel: {tariff.rate}
-                      </span>
-                      <span className="text-xs bg-tradelearn-blue/20 text-tradelearn-blue px-2 py-1 rounded">
-                        TLC: {tariff.tlcs}
-                      </span>
+          !loading && (
+            <div className="space-y-3">
+              {filtered.map((tariff) => (
+                <button
+                  key={tariff.code}
+                  onClick={() => setSelectedTariff(tariff)}
+                  className="w-full text-left bg-tradelearn-navy border-l-4 border-tradelearn-gold rounded-lg p-4 hover:bg-slate-800 transition"
+                >
+                  <div className="flex items-start justify-between">
+                    <div className="flex-1">
+                      <p className="font-bold text-tradelearn-gold">{tariff.code}</p>
+                      <p className="text-sm text-slate-300 mt-1">{tariff.description}</p>
+                      <div className="flex gap-2 mt-3 flex-wrap">
+                        <span className="text-xs bg-tradelearn-gold/20 text-tradelearn-gold px-2 py-1 rounded">
+                          Arancel: {tariff.rate}
+                        </span>
+                        <span className="text-xs bg-tradelearn-blue/20 text-tradelearn-blue px-2 py-1 rounded">
+                          TLC: {tariff.tlcs}
+                        </span>
+                      </div>
                     </div>
                   </div>
-                </div>
-              </button>
-            ))}
-          </div>
+                </button>
+              ))}
+            </div>
+          )
         )}
       </div>
 
