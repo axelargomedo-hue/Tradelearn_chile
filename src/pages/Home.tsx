@@ -210,7 +210,7 @@ export default function Home({ onNavigate }: HomeProps) {
         <div className="flex items-center justify-between mb-3">
           <div className="flex items-center gap-4">
             <div className="w-16 h-16 rounded-2xl overflow-hidden shadow-[0_0_20px_rgba(255,193,7,0.4)] flex-shrink-0 bg-white">
-              <img src="/pngegg.png" alt="TradeLearn" className="w-full h-full object-contain" />
+              <img src="/Logo_UTA-generated-transparent.png" alt="Universidad de Tarapacá" className="w-full h-full object-contain mix-blend-multiply bg-transparent" />
             </div>
             <div>
               <h1 className="text-4xl font-bold text-tradelearn-gold leading-none tracking-tight">
@@ -507,11 +507,11 @@ export default function Home({ onNavigate }: HomeProps) {
               gradient="bg-gradient-to-br from-emerald-600 to-teal-600"
             />
             <ModuleCard
-              icon="🎓"
+              icon="🌐"
               number="06"
-              title="Análisis IA"
-              description="Interpreta el mercado con IA"
-              onClick={() => onNavigate('indicators')}
+              title="Tratados de Libre Comercio"
+              description="Consulta 17 acuerdos comerciales de Chile"
+              onClick={() => onNavigate('agreements')}
               gradient="bg-gradient-to-br from-tradelearn-gold to-amber-500"
             />
           </div>
