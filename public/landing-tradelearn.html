@@ -1,0 +1,708 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0b1530">
+  <meta name="description" content="TradeLearn Chile: herramientas de consulta, cálculo y aprendizaje aplicado al comercio exterior.">
+  <meta property="og:title" content="TradeLearn Chile | Comercio exterior en práctica">
+  <meta property="og:description" content="Explora herramientas digitales para aprender, consultar y analizar operaciones de comercio exterior.">
+  <title>TradeLearn Chile — Del conocimiento a la práctica</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap');
+    :root {
+      --navy: #0b1530;
+      --navy-2: #101e3d;
+      --navy-3: #14264a;
+      --gold: #ffc107;
+      --gold-2: #ffda59;
+      --blue: #78aef7;
+      --paper: #f6f8fc;
+      --white: #fff;
+      --ink: #172033;
+      --muted: #65728a;
+      --line: rgba(255,255,255,.12);
+      --radius: 22px;
+      --max: 1190px;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; scroll-padding-top: 92px; }
+    body { margin: 0; background: var(--paper); color: var(--ink); font-family: 'DM Sans', sans-serif; -webkit-font-smoothing: antialiased; }
+    body, button, input { font-family: 'DM Sans', sans-serif; }
+    button, a, input { -webkit-tap-highlight-color: transparent; }
+    button { cursor: pointer; }
+    a { color: inherit; text-decoration: none; }
+    button:focus-visible, a:focus-visible, input:focus-visible { outline: 3px solid #78aef7; outline-offset: 4px; }
+    .wrap { width: min(var(--max), calc(100% - 48px)); margin-inline: auto; }
+    .topbar { position: sticky; inset: 0 0 auto; z-index: 20; background: rgba(11,21,48,.88); border-bottom: 1px solid rgba(255,255,255,.08); backdrop-filter: blur(18px); }
+    .nav { display:flex; align-items:center; justify-content:space-between; min-height:78px; gap:24px; }
+    .brand { display:inline-flex; align-items:center; gap:12px; border:0; background:none; color:#fff; padding:0; }
+    .brand-mark { width:38px; height:38px; position:relative; display:grid; place-items:center; flex:0 0 auto; }
+    .brand-mark:before,.brand-mark:after { content:""; position:absolute; width:26px; height:26px; border:2px solid var(--gold); border-radius:9px; transform:rotate(45deg); }
+    .brand-mark:after { width:15px; height:15px; border-color:var(--blue); border-radius:5px; transform:rotate(0); }
+    .brand-word { font:800 19px/1 'Manrope',sans-serif; letter-spacing:-.8px; white-space:nowrap; }
+    .brand-word b { color:var(--gold); }
+    .nav-links { display:flex; gap:30px; align-items:center; }
+    .nav-links a { font-size:13px; color:#c3ccdf; transition:color .2s; }
+    .nav-links a:hover { color:var(--gold); }
+    .nav-cta,.btn { display:inline-flex; align-items:center; justify-content:center; gap:10px; border:1px solid transparent; border-radius:13px; padding:13px 18px; font-weight:700; font-size:13px; transition:transform .22s, background .22s, border-color .22s, box-shadow .22s; }
+    .nav-cta { background:var(--gold); color:var(--navy); }
+    .nav-cta:hover,.btn-gold:hover { background:var(--gold-2); transform:translateY(-2px); box-shadow:0 12px 30px rgba(255,193,7,.15); }
+    .menu-toggle { display:none; border:1px solid var(--line); width:42px; height:42px; color:white; background:rgba(255,255,255,.05); border-radius:12px; align-items:center; justify-content:center; font-size:21px; }
+    .hero { background:var(--navy); color:white; position:relative; overflow:hidden; }
+    .hero:before { content:""; position:absolute; inset:0; pointer-events:none; opacity:.19; background-image:linear-gradient(rgba(255,255,255,.12) 1px, transparent 1px),linear-gradient(90deg,rgba(255,255,255,.12) 1px,transparent 1px); background-size:64px 64px; mask-image:linear-gradient(to bottom,black,transparent 90%); }
+    .hero:after { content:""; position:absolute; width:650px; height:650px; right:-160px; top:-120px; border-radius:50%; background:radial-gradient(circle,rgba(59,127,209,.24),rgba(59,127,209,0) 68%); pointer-events:none; }
+    .hero-inner { min-height:650px; display:grid; grid-template-columns:.94fr 1.06fr; gap:44px; align-items:center; padding:70px 0 80px; position:relative; z-index:1; }
+    .eyebrow { display:inline-flex; gap:10px; align-items:center; color:#d5deef; font-size:10px; letter-spacing:1.65px; font-weight:700; text-transform:uppercase; }
+    .eyebrow-mark { width:7px; height:7px; background:var(--gold); border-radius:2px; box-shadow:0 0 16px rgba(255,193,7,.7); }
+    h1,h2,h3,p { margin-top:0; }
+    h1,h2,h3 { font-family:'Manrope',sans-serif; }
+    h1 { margin:24px 0 20px; max-width:610px; font-size:clamp(43px,5.2vw,70px); line-height:1.045; letter-spacing:-3.7px; font-weight:800; }
+    h1 span,.section-title span { color:var(--gold); }
+    .hero-copy { color:#b9c4da; max-width:510px; font-size:16px; line-height:1.85; }
+    .actions { display:flex; flex-wrap:wrap; gap:12px; margin-top:30px; }
+    .btn-gold { background:var(--gold); color:var(--navy); }
+    .btn-outline { color:#fff; border-color:rgba(255,255,255,.23); background:rgba(255,255,255,.035); }
+    .btn-outline:hover { border-color:var(--gold); color:var(--gold); transform:translateY(-2px); }
+    .hero-note { display:flex; align-items:center; gap:11px; color:#91a1bd; font-size:11px; line-height:1.55; margin-top:27px; max-width:420px; }
+    .note-icon { display:grid; place-items:center; width:30px; height:30px; color:var(--gold); border:1px solid rgba(255,193,7,.25); border-radius:10px; flex:0 0 auto; }
+    .visual { position:relative; min-width:0; padding:25px 0 25px 10px; }
+    .visual-orbit { position:absolute; border:1px solid rgba(120,174,247,.15); border-radius:50%; pointer-events:none; }
+    .orbit-a { width:510px; height:510px; top:50%; left:50%; transform:translate(-50%,-50%); }
+    .orbit-b { width:390px; height:390px; top:50%; left:50%; transform:translate(-50%,-50%); border-style:dashed; }
+    .float-label { position:absolute; z-index:5; display:flex; align-items:center; gap:9px; padding:11px 14px; border-radius:12px; font-size:11px; font-weight:700; color:#e7edf9; background:rgba(18,33,65,.94); border:1px solid rgba(255,255,255,.14); box-shadow:0 14px 40px rgba(0,0,0,.24); backdrop-filter:blur(12px); }
+    .float-top { top:1px; right:3px; animation:drift 5s ease-in-out infinite; }
+    .float-bottom { bottom:0; left:-15px; animation:drift 5.8s ease-in-out infinite reverse; }
+    .float-gem { display:grid; place-items:center; width:23px; height:23px; border-radius:7px; color:var(--navy); background:var(--gold); font-size:14px; }
+    .signal { width:7px; height:7px; border-radius:100%; background:#54dfa3; box-shadow:0 0 12px rgba(84,223,163,.5); }
+    .product { position:relative; z-index:2; overflow:hidden; border-radius:19px; background:#f9fbff; color:var(--ink); border:1px solid rgba(255,255,255,.22); box-shadow:0 32px 100px rgba(0,0,0,.37); transform:perspective(1400px) rotateY(-3deg) rotateX(1deg); }
+    .product-top { height:55px; padding:0 18px; display:flex; align-items:center; justify-content:space-between; background:#fff; border-bottom:1px solid #e8edf5; }
+    .product-brand { display:flex; align-items:center; gap:9px; font:800 12px 'Manrope',sans-serif; }
+    .product-brand .brand-mark { transform:scale(.68); margin:-5px; }
+    .product-brand b { color:#9d7800; }
+    .window-dots { display:flex; gap:5px; }
+    .window-dots i { width:6px; height:6px; border-radius:50%; background:#c7d0df; }
+    .product-body { display:grid; grid-template-columns:140px minmax(0,1fr); min-height:340px; }
+    .product-side { background:#101d3b; padding:21px 12px; color:#9aa8c2; display:flex; flex-direction:column; gap:7px; }
+    .side-caption { font-size:8px; letter-spacing:1.15px; color:#65799d; margin:0 8px 9px; font-weight:700; }
+    .side-link { font-size:10px; padding:10px 9px; display:flex; align-items:center; gap:8px; border-radius:8px; }
+    .side-link.active { background:rgba(255,193,7,.13); color:var(--gold); }
+    .side-ico { width:15px; display:inline-grid; place-items:center; font-size:13px; }
+    .side-separator { height:1px; background:rgba(255,255,255,.09); margin:9px 3px; }
+    .side-foot { margin-top:auto; font-size:8px; color:#65799d; line-height:1.5; padding:8px; }
+    .product-main { padding:23px 20px 17px; min-width:0; }
+    .product-heading { display:flex; justify-content:space-between; gap:12px; align-items:flex-start; }
+    .overline { display:block; font-size:8px; font-weight:800; letter-spacing:1.15px; color:#74829a; margin-bottom:7px; }
+    .product-heading h2 { font-size:16px; letter-spacing:-.5px; margin:0; }
+    .preview-chip { font-size:7px; font-weight:800; color:#8a6900; background:#fff4c9; padding:6px 8px; border-radius:6px; white-space:nowrap; }
+    .stat-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:20px; }
+    .stat-card { padding:13px; border:1px solid #e5ebf5; background:white; border-radius:12px; min-width:0; }
+    .stat-icon { width:27px; height:27px; display:grid; place-items:center; border-radius:8px; font-size:14px; margin-bottom:12px; }
+    .stat-icon.blue { color:#2869b8; background:#e5f0ff; }
+    .stat-icon.gold { color:#987100; background:#fff3c4; }
+    .stat-label { font-size:9px; color:#8190a6; display:block; }
+    .stat-card strong { display:block; margin-top:4px; font:800 12px 'Manrope',sans-serif; }
+    .stat-card small { display:block; color:#8a97aa; font-size:8px; margin-top:5px; }
+    .path-card { border-radius:12px; border:1px solid #e5ebf5; background:#fff; padding:15px 14px; margin-top:11px; }
+    .path-heading { display:flex; justify-content:space-between; gap:8px; align-items:center; }
+    .path-heading strong { display:block; font:800 11px 'Manrope',sans-serif; }
+    .path-badge { font-size:8px; color:#16875e; display:flex; gap:4px; align-items:center; }
+    .path-steps { display:flex; align-items:center; justify-content:space-between; margin-top:16px; }
+    .path-step { display:flex; align-items:center; flex-direction:column; gap:7px; font-size:8px; color:#69768d; white-space:nowrap; }
+    .path-step span { width:30px; height:30px; border:1px solid #dfe7f2; color:#6980a5; background:#f4f7fc; display:grid; place-items:center; border-radius:10px; font-size:13px; }
+    .path-step.done span { color:#866600; border-color:#f2d76b; background:#fff8d9; }
+    .path-line { height:1px; flex:1; margin:0 7px 19px; background:#dce4f0; min-width:12px; }
+    .product-foot { display:flex; align-items:center; gap:9px; margin-top:11px; color:#708099; font-size:9px; }
+    .shield { width:24px; height:24px; display:grid; place-items:center; background:#eaf4ff; color:#316fb8; border-radius:8px; }
+    .hero-ribbon { position:relative; z-index:1; border-top:1px solid rgba(255,255,255,.09); }
+    .ribbon-inner { display:flex; justify-content:space-between; align-items:center; gap:18px; min-height:59px; color:#a7b5ce; font-size:9px; letter-spacing:1.4px; font-weight:700; }
+    .ribbon-divider { width:35px; height:1px; background:rgba(255,193,7,.55); }
+    .intro { background:white; border-bottom:1px solid #e8edf5; }
+    .intro-inner { display:grid; grid-template-columns:.7fr 1.3fr; gap:50px; align-items:center; padding:34px 0; }
+    .intro-label { color:#697790; font-size:9px; letter-spacing:1.4px; font-weight:800; }
+    .intro-label span { display:block; color:#a78300; margin-bottom:8px; }
+    .intro p { font:700 clamp(18px,2.3vw,25px)/1.45 'Manrope',sans-serif; letter-spacing:-.7px; margin:0; max-width:800px; }
+    .intro em { color:#a78300; font-style:normal; }
+    .section { padding:100px 0; }
+    .section-head { display:flex; justify-content:space-between; gap:45px; align-items:flex-end; margin-bottom:40px; }
+    .section-kicker { display:flex; align-items:center; gap:10px; color:#71809a; font-weight:800; font-size:9px; letter-spacing:1.65px; text-transform:uppercase; }
+    .kicker-square { width:7px; height:7px; border-radius:2px; background:#d7a400; }
+    .section-title { font-size:clamp(34px,4vw,49px); line-height:1.13; letter-spacing:-2.2px; margin:17px 0 0; font-weight:800; }
+    .section-head > p { max-width:390px; color:var(--muted); font-size:14px; line-height:1.8; margin:0 0 3px; }
+    .benefit-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:15px; }
+    .benefit-card { display:flex; flex-direction:column; min-height:244px; padding:22px 20px 18px; border:1px solid #e3e9f2; border-radius:18px; background:#fff; transition:transform .25s,box-shadow .25s,border-color .25s; }
+    .benefit-card:hover { transform:translateY(-5px); box-shadow:0 22px 45px rgba(14,34,71,.08); border-color:#c5d7ef; }
+    .card-top { display:flex; justify-content:space-between; align-items:center; gap:8px; color:#8a97ac; font-size:8px; letter-spacing:1px; font-weight:800; }
+    .benefit-icon { display:grid; place-items:center; border-radius:11px; width:38px; height:38px; background:#fff4c9; color:#8d6b00; font-size:18px; }
+    .benefit-card h3 { font-size:17px; line-height:1.35; letter-spacing:-.55px; margin:25px 0 10px; }
+    .benefit-card p { margin:0; color:#69758a; font-size:12px; line-height:1.75; }
+    .card-rule { width:100%; height:2px; background:#edf0f6; margin-top:auto; transform:scaleX(1); transform-origin:left; }
+    .card-rule span { display:block; width:29%; height:100%; background:var(--gold); transition:width .3s; }
+    .benefit-card:hover .card-rule span { width:100%; }
+    .tools-section { background:var(--navy); color:#fff; position:relative; overflow:hidden; }
+    .tools-section:before { content:""; position:absolute; width:540px; height:540px; left:-270px; bottom:-330px; border-radius:50%; border:1px solid rgba(120,174,247,.13); box-shadow:0 0 0 50px rgba(120,174,247,.025),0 0 0 100px rgba(120,174,247,.02); pointer-events:none; }
+    .tools-section .section-head { position:relative; z-index:1; }
+    .tools-section .section-kicker { color:#a9b8d1; }
+    .tools-section .section-title { color:#fff; }
+    .tools-section .section-head > p { color:#a9b8d1; }
+    .tool-count { display:inline-flex; gap:10px; align-items:center; margin-top:18px; color:#90a1bf; font-size:9px; font-weight:800; letter-spacing:1.15px; }
+    .tool-count b { color:var(--gold); font:800 18px 'Manrope',sans-serif; }
+    .tool-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:13px; position:relative; z-index:1; }
+    .tool-card { display:flex; flex-direction:column; text-align:left; min-height:255px; padding:21px 19px 18px; color:white; border-radius:17px; border:1px solid rgba(255,255,255,.12); background:rgba(255,255,255,.045); transition:transform .24s,border-color .24s,background .24s,box-shadow .24s; }
+    .tool-card:hover { transform:translateY(-5px); border-color:rgba(255,193,7,.65); background:rgba(255,255,255,.075); box-shadow:0 20px 50px rgba(0,0,0,.2); }
+    .tool-top { display:flex; justify-content:space-between; align-items:center; margin-bottom:24px; }
+    .tool-icon { display:grid; place-items:center; width:42px; height:42px; border-radius:12px; background:rgba(120,174,247,.13); color:#8bbafa; font-size:20px; }
+    .tool-card.gold .tool-icon { background:rgba(255,193,7,.12); color:var(--gold); }
+    .tool-number { color:#7182a1; font:700 11px 'Manrope',sans-serif; }
+    .tool-category { color:#a0afc8; text-transform:uppercase; letter-spacing:1px; font-weight:700; font-size:8px; }
+    .tool-card h3 { margin:9px 0 8px; font-size:16px; line-height:1.3; letter-spacing:-.45px; }
+    .tool-card p { color:#aebbd1; font-size:11px; line-height:1.7; margin:0 0 19px; }
+    .tool-link { display:flex; align-items:center; gap:7px; color:var(--gold); font-size:10px; font-weight:800; margin-top:auto; }
+    .tool-link span { transition:transform .2s; }
+    .tool-card:hover .tool-link span { transform:translateX(4px); }
+    .tools-foot { position:relative; z-index:1; display:flex; align-items:center; gap:10px; color:#97a7c3; font-size:10px; line-height:1.6; margin-top:26px; }
+    .tools-foot b { color:#d6e0f1; }
+    .demo-section { background:#edf2f9; }
+    .demo-layout { display:grid; grid-template-columns:.75fr 1.25fr; gap:65px; align-items:center; }
+    .demo-copy .section-title { margin-top:17px; }
+    .demo-copy > p { color:var(--muted); font-size:14px; line-height:1.85; margin:20px 0; }
+    .demo-checks { display:grid; gap:12px; margin:25px 0 0; }
+    .demo-check { display:flex; align-items:flex-start; gap:10px; color:#4b5a72; font-size:12px; line-height:1.55; }
+    .check { color:#9c7900; font-size:17px; }
+    .demo-window { border-radius:20px; overflow:hidden; background:#fff; border:1px solid #dfe6f0; box-shadow:0 28px 70px rgba(19,40,76,.12); min-width:0; }
+    .demo-window-head { height:58px; display:flex; align-items:center; justify-content:space-between; gap:12px; padding:0 20px; border-bottom:1px solid #e8edf5; }
+    .demo-window-brand { font:800 12px 'Manrope',sans-serif; display:flex; align-items:center; gap:8px; }
+    .demo-window-brand b { color:#9a7600; }
+    .demo-mini-mark { width:20px; height:20px; display:grid; place-items:center; border:2px solid #d4a900; border-radius:6px; transform:rotate(45deg); }
+    .demo-mini-mark span { width:7px; height:7px; border-radius:2px; background:#4583d1; }
+    .demo-tag { display:flex; align-items:center; gap:7px; color:#977500; font-size:8px; letter-spacing:.8px; font-weight:800; background:#fff6d4; padding:7px 9px; border-radius:7px; }
+    .demo-tag:before { content:""; width:5px; height:5px; background:#c59a00; border-radius:50%; }
+    .demo-tabs { display:flex; gap:4px; padding:12px 15px 0; border-bottom:1px solid #e9edf4; }
+    .demo-tab { border:0; border-radius:9px 9px 0 0; display:flex; align-items:center; justify-content:center; gap:8px; padding:12px 14px; color:#6e7b91; background:transparent; font-size:10px; font-weight:700; border-bottom:2px solid transparent; }
+    .demo-tab[aria-selected="true"] { background:#fff9e4; border-bottom-color:#d4a500; color:#755900; }
+    .demo-panel { min-height:338px; padding:23px 23px 20px; animation:panelIn .28s ease both; }
+    .panel-head { display:flex; align-items:center; justify-content:space-between; gap:15px; margin-bottom:20px; }
+    .panel-eyebrow { color:#8996aa; letter-spacing:1px; font-size:8px; font-weight:800; display:block; margin-bottom:6px; }
+    .panel-head h3 { margin:0; font-size:17px; letter-spacing:-.55px; }
+    .panel-icon { width:38px; height:38px; border-radius:12px; background:#eaf2ff; color:#346fba; display:grid; place-items:center; font-size:19px; }
+    .field-label { display:block; color:#58667d; font-size:10px; font-weight:700; margin-bottom:8px; }
+    .search-field { display:flex; gap:9px; align-items:center; padding:0 12px; border:1px solid #dce4ef; border-radius:10px; min-height:44px; }
+    .search-field input { flex:1; width:100%; min-width:0; border:0; outline:0; color:#1e2c43; background:transparent; font-size:12px; }
+    .search-field input:focus-visible { outline:none; }
+    .search-label { background:#fff2bf; color:#8a6900; font-size:7px; letter-spacing:.5px; font-weight:800; padding:5px 7px; border-radius:5px; }
+    .demo-result { padding:15px; border:1px solid #e2e9f3; border-radius:12px; margin-top:13px; background:#fbfcff; }
+    .result-top { display:flex; justify-content:space-between; align-items:center; color:#8c98aa; font-size:8px; font-weight:800; letter-spacing:.8px; }
+    .result-status { color:#8a6a00; background:#fff2bf; border-radius:5px; padding:5px 6px; }
+    .demo-result strong { display:block; font:800 15px 'Manrope',sans-serif; margin:13px 0 6px; overflow-wrap:anywhere; }
+    .demo-result p,.demo-note { color:#7b879a; font-size:10px; line-height:1.65; margin:0; }
+    .demo-note { margin-top:10px; }
+    .demo-open { margin-top:17px; display:inline-flex; align-items:center; gap:8px; border:0; background:none; color:#876800; padding:0; font-size:11px; font-weight:800; }
+    .demo-open:hover { color:#4c3b00; }
+    .demo-open span { font-size:15px; }
+    .calc-copy { color:#738097; font-size:10px; line-height:1.6; margin:-8px 0 15px; }
+    .calc-fields { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; }
+    .calc-fields label { font-size:9px; font-weight:700; color:#627088; }
+    .calc-fields input { display:block; width:100%; min-width:0; border:1px solid #dce4ef; border-radius:9px; padding:10px 9px; font-size:12px; margin-top:7px; background:#fbfcff; color:#172033; }
+    .cif-result { display:flex; flex-direction:column; gap:6px; margin-top:14px; padding:15px; border-radius:12px; color:#fff; background:#102044; }
+    .cif-result > span:first-child { color:#b4c2db; font-size:9px; }
+    .cif-result strong { color:#ffcf27; font:800 26px 'Manrope',sans-serif; letter-spacing:-.5px; }
+    .cif-result .result-hint { display:flex; gap:6px; align-items:center; color:#a9d8bd; font-size:9px; }
+    .incoterm-row { display:grid; grid-template-columns:49px minmax(0,1fr) 23px; gap:12px; align-items:center; border:1px solid #e5eaf2; padding:12px; border-radius:11px; margin-top:9px; }
+    .incoterm-code { display:grid; place-items:center; background:#102044; border-radius:8px; min-height:39px; color:#ffcf27; font:800 13px 'Manrope',sans-serif; }
+    .incoterm-row strong { display:block; font-size:11px; margin-bottom:4px; }
+    .incoterm-row p { font-size:9px; color:#738096; line-height:1.5; margin:0; }
+    .incoterm-index { color:#a2adbd; font-size:9px; }
+    .demo-window-foot { border-top:1px solid #e8edf5; padding:12px 20px; display:flex; justify-content:space-between; gap:10px; color:#8a96a9; font-size:8px; }
+    .journey-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }
+    .journey-card { background:#fff; padding:26px; border:1px solid #e2e8f1; border-radius:18px; min-height:235px; position:relative; overflow:hidden; }
+    .journey-num { font:800 12px 'Manrope',sans-serif; color:#ac8a0b; letter-spacing:1px; }
+    .journey-icon { margin-top:26px; display:grid; place-items:center; width:43px; height:43px; background:#eef4ff; color:#3d72b3; border-radius:13px; font-size:21px; }
+    .journey-card h3 { font-size:18px; margin:17px 0 8px; letter-spacing:-.5px; }
+    .journey-card p { font-size:12px; line-height:1.75; color:#69768c; margin:0; }
+    .how-section { color:white; background:#101e3d; position:relative; overflow:hidden; }
+    .how-section:after { content:""; position:absolute; right:-250px; top:-290px; width:590px; height:590px; border:1px solid rgba(255,193,7,.11); border-radius:50%; box-shadow:0 0 0 65px rgba(255,193,7,.025),0 0 0 130px rgba(255,193,7,.02); pointer-events:none; }
+    .how-layout { position:relative; z-index:1; display:grid; grid-template-columns:.9fr 1.1fr; gap:70px; align-items:center; }
+    .how-layout .section-title { color:#fff; }
+    .how-layout .section-kicker { color:#a9b8d1; }
+    .how-copy { color:#aebbd1; font-size:13px; line-height:1.85; max-width:420px; margin:20px 0 27px; }
+    .steps { border-top:1px solid rgba(255,255,255,.12); }
+    .step { display:grid; grid-template-columns:49px 1fr 20px; gap:16px; align-items:center; padding:23px 0; border-bottom:1px solid rgba(255,255,255,.12); }
+    .step-num { font:800 16px 'Manrope',sans-serif; color:var(--gold); }
+    .step h3 { margin:0 0 5px; font-size:15px; }
+    .step p { margin:0; color:#a1b0c9; font-size:11px; line-height:1.6; }
+    .step-symbol { color:#92a4c2; font-size:19px; }
+    .final-cta { position:relative; overflow:hidden; background:#0b1530; color:white; text-align:center; padding:95px 0 100px; }
+    .cta-pattern { position:absolute; inset:0; opacity:.3; background:radial-gradient(ellipse at 50% 100%,rgba(255,193,7,.17),transparent 58%),linear-gradient(90deg,transparent 49.8%,rgba(255,255,255,.05) 50%,transparent 50.2%); pointer-events:none; }
+    .cta-inner { position:relative; z-index:1; }
+    .cta-label { display:inline-flex; align-items:center; gap:9px; color:#a9b7d0; letter-spacing:1.3px; font-size:9px; font-weight:800; }
+    .cta-label .brand-mark { transform:scale(.7); margin:-5px; }
+    .final-cta h2 { margin:22px auto 17px; font-size:clamp(34px,4.6vw,56px); letter-spacing:-2.5px; line-height:1.13; }
+    .final-cta h2 span { color:var(--gold); }
+    .final-cta p { max-width:520px; margin:0 auto; color:#aebbd1; font-size:13px; line-height:1.8; }
+    .final-cta .actions { justify-content:center; }
+    .footer { background:#081127; color:#fff; }
+    .footer-inner { display:grid; grid-template-columns:1fr auto; gap:25px; padding:28px 0 19px; align-items:center; }
+    .footer-desc { color:#8d9cb7; font-size:11px; margin:11px 0 0; }
+    .footer-links { display:flex; gap:20px; flex-wrap:wrap; justify-content:flex-end; }
+    .footer-links a { color:#aebbd1; font-size:10px; }
+    .footer-links a:hover { color:var(--gold); }
+    .footer-bottom { grid-column:1/-1; border-top:1px solid rgba(255,255,255,.1); padding-top:17px; margin-top:5px; display:flex; justify-content:space-between; gap:15px; color:#667692; font-size:9px; line-height:1.6; }
+    .reveal { opacity:0; transform:translateY(18px); transition:opacity .7s ease,transform .7s cubic-bezier(.2,.7,.2,1); }
+    .reveal.visible { opacity:1; transform:translateY(0); }
+    .hero-animate { animation:heroIn .85s cubic-bezier(.2,.7,.2,1) both; }
+    .delay-1 { animation-delay:.12s; }
+    .delay-2 { animation-delay:.22s; }
+    .delay-3 { animation-delay:.32s; }
+    .custom-cursor .cursor { opacity:0; }
+    .cursor { pointer-events:none; position:fixed; z-index:99; top:-30px; left:-30px; width:28px; height:28px; border:1px solid rgba(255,193,7,.8); border-radius:50%; transform:translate(-50%,-50%); opacity:0; transition:width .2s,height .2s,background .2s,opacity .2s; display:none; }
+    .cursor:after { content:""; position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); width:4px; height:4px; border-radius:50%; background:var(--gold); }
+    .cursor.visible { opacity:1; }
+    .cursor.hover { width:43px; height:43px; background:rgba(255,193,7,.12); }
+    @keyframes heroIn { from { opacity:0; transform:translateY(16px); } to { opacity:1; transform:translateY(0); } }
+    @keyframes drift { 0%,100% { transform:translateY(0); } 50% { transform:translateY(-7px); } }
+    @keyframes panelIn { from { opacity:0; transform:translateY(5px); } to { opacity:1; transform:translateY(0); } }
+    @media (pointer:fine) and (prefers-reduced-motion:no-preference) { body.cursor-enabled { cursor:none; } body.cursor-enabled a,body.cursor-enabled button { cursor:none; } body.cursor-enabled input { cursor:text; } body.cursor-enabled .cursor { display:block; } }
+    @media (max-width:1050px) {
+      .hero-inner { grid-template-columns:1fr 1fr; gap:28px; }
+      h1 { font-size:clamp(42px,5.2vw,60px); letter-spacing:-2.8px; }
+      .product-body { grid-template-columns:112px minmax(0,1fr); }
+      .product-side { padding-inline:8px; }
+      .product-main { padding:19px 14px 14px; }
+      .benefit-grid,.tool-grid { grid-template-columns:repeat(2,1fr); }
+      .benefit-card { min-height:220px; }
+      .tool-card { min-height:225px; }
+      .demo-layout { gap:35px; }
+      .how-layout { gap:38px; }
+    }
+    @media (max-width:760px) {
+      .wrap { width:min(100% - 34px,var(--max)); }
+      .nav { min-height:68px; }
+      .brand-word { font-size:17px; }
+      .brand-mark { transform:scale(.9); }
+      .menu-toggle { display:flex; }
+      .nav-links { display:none; position:absolute; top:68px; inset-inline:0; padding:17px; background:rgba(11,21,48,.98); border-bottom:1px solid var(--line); flex-direction:column; align-items:stretch; gap:4px; }
+      .nav-links.open { display:flex; }
+      .nav-links a { padding:13px 10px; font-size:13px; }
+      .nav-cta { justify-content:center; margin-top:5px; }
+      .hero-inner { display:flex; flex-direction:column; align-items:stretch; padding:58px 0 37px; gap:36px; }
+      h1 { max-width:570px; font-size:clamp(42px,10vw,61px); letter-spacing:-2.6px; line-height:1.06; margin-top:21px; }
+      .hero-copy { font-size:14px; line-height:1.8; }
+      .actions { gap:10px; }
+      .btn { padding:13px 15px; font-size:12px; }
+      .visual { padding:14px 2px 22px; margin:0 7px; }
+      .product { transform:none; }
+      .product-body { grid-template-columns:100px minmax(0,1fr); min-height:310px; }
+      .product-side { padding:17px 7px; }
+      .side-link { font-size:9px; padding:9px 6px; gap:5px; }
+      .product-main { padding:17px 12px 13px; }
+      .product-heading h2 { font-size:13px; }
+      .stat-grid { gap:7px; margin-top:15px; }
+      .stat-card { padding:10px; }
+      .path-card { padding:12px 9px; }
+      .path-step { font-size:7px; }
+      .path-step span { width:27px; height:27px; }
+      .path-line { margin-inline:4px; }
+      .float-label { font-size:9px; padding:9px 10px; }
+      .float-top { right:-4px; top:0; }
+      .float-bottom { left:-8px; bottom:0; }
+      .orbit-a { width:360px; height:360px; }
+      .orbit-b { width:290px; height:290px; }
+      .hero-ribbon { display:none; }
+      .intro-inner { display:block; padding:28px 0; }
+      .intro-label { margin-bottom:15px; }
+      .intro p { font-size:21px; }
+      .section { padding:72px 0; }
+      .section-head { display:block; margin-bottom:27px; }
+      .section-head > p { margin-top:20px; font-size:13px; }
+      .section-title { font-size:clamp(33px,8vw,44px); letter-spacing:-1.8px; }
+      .benefit-grid { gap:10px; }
+      .benefit-card { padding:17px 15px 15px; min-height:245px; }
+      .card-top { align-items:flex-start; flex-direction:column-reverse; }
+      .benefit-card h3 { font-size:15px; margin-top:18px; }
+      .benefit-card p { font-size:11px; }
+      .tool-grid { gap:10px; }
+      .tool-card { padding:16px 14px 15px; min-height:248px; }
+      .tool-card h3 { font-size:15px; }
+      .tool-card p { font-size:10px; }
+      .tools-foot { align-items:flex-start; }
+      .demo-layout,.how-layout { grid-template-columns:1fr; gap:35px; }
+      .demo-copy .section-title { margin-bottom:0; }
+      .demo-window-head { padding-inline:14px; }
+      .demo-tabs { padding-inline:8px; }
+      .demo-tab { padding:12px 8px; font-size:9px; flex:1; gap:5px; }
+      .demo-panel { padding:19px 15px 18px; }
+      .demo-window-foot { padding-inline:14px; }
+      .demo-window-foot span:last-child { text-align:right; }
+      .journey-grid { grid-template-columns:1fr; gap:11px; }
+      .journey-card { min-height:0; padding:21px; display:grid; grid-template-columns:45px 1fr; column-gap:14px; }
+      .journey-num { grid-column:1/-1; }
+      .journey-icon { grid-row:2/4; margin-top:19px; }
+      .journey-card h3 { margin:19px 0 6px; font-size:17px; }
+      .journey-card p { grid-column:2; }
+      .how-layout { gap:28px; }
+      .step { grid-template-columns:37px 1fr 17px; gap:11px; padding:20px 0; }
+      .step h3 { font-size:14px; }
+      .step p { font-size:10px; }
+      .final-cta { padding:72px 0 75px; }
+      .final-cta h2 { font-size:clamp(32px,8vw,47px); letter-spacing:-1.7px; }
+      .footer-inner { grid-template-columns:1fr; gap:20px; }
+      .footer-links { justify-content:flex-start; }
+      .footer-bottom { display:block; }
+      .footer-bottom span { display:block; margin-top:5px; }
+    }
+    @media (max-width:420px) {
+      .wrap { width:calc(100% - 28px); }
+      .brand-word { font-size:16px; }
+      .hero-inner { padding-top:45px; }
+      .eyebrow { font-size:8px; letter-spacing:1.2px; }
+      h1 { font-size:41px; letter-spacing:-2.1px; }
+      .actions { flex-direction:column; align-items:stretch; }
+      .actions .btn { width:100%; }
+      .product-body { grid-template-columns:82px minmax(0,1fr); min-height:285px; }
+      .product-side { padding-inline:5px; }
+      .side-caption { font-size:6px; margin-inline:4px; }
+      .side-link { font-size:8px; padding:9px 4px; }
+      .side-ico { font-size:11px; width:12px; }
+      .product-main { padding:15px 9px 10px; }
+      .product-heading h2 { font-size:11px; }
+      .preview-chip { font-size:6px; padding:5px; }
+      .stat-card { padding:8px; }
+      .stat-card strong { font-size:10px; }
+      .stat-card small { font-size:7px; }
+      .path-heading strong { font-size:9px; }
+      .path-step { font-size:6px; }
+      .path-step span { width:23px; height:23px; border-radius:7px; }
+      .product-foot { font-size:7px; }
+      .float-bottom { left:-3px; }
+      .float-label { font-size:8px; }
+      .benefit-grid,.tool-grid { grid-template-columns:1fr; }
+      .benefit-card { min-height:0; }
+      .benefit-card h3 { margin-top:20px; }
+      .tool-card { min-height:0; }
+      .tool-top { margin-bottom:18px; }
+      .tool-card p { font-size:11px; }
+      .calc-fields { grid-template-columns:1fr; }
+      .calc-fields label { display:flex; justify-content:space-between; align-items:center; gap:15px; }
+      .calc-fields input { max-width:60%; margin-top:0; }
+      .demo-tab { font-size:8px; padding-inline:5px; }
+    }
+    @media (prefers-reduced-motion:reduce) {
+      *,*::before,*::after { scroll-behavior:auto !important; animation-duration:.01ms !important; animation-iteration-count:1 !important; transition-duration:.01ms !important; }
+      .reveal { opacity:1; transform:none; }
+      .hero-animate { animation:none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="cursor" aria-hidden="true"></div>
+  <header class="topbar">
+    <div class="wrap nav">
+      <a class="brand" href="#inicio" aria-label="TradeLearn Chile, inicio">
+        <span class="brand-mark" aria-hidden="true"></span><span class="brand-word">TradeLearn <b>Chile</b></span>
+      </a>
+      <button class="menu-toggle" aria-label="Abrir menú" aria-expanded="false">☰</button>
+      <nav class="nav-links" aria-label="Navegación principal">
+        <a href="#herramientas">Herramientas</a>
+        <a href="#beneficios">Beneficios</a>
+        <a href="#como-empezar">Cómo empezar</a>
+        <a class="nav-cta" href="/#home">Entrar a la plataforma <span aria-hidden="true">↗</span></a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero" id="inicio">
+      <div class="wrap hero-inner">
+        <div class="hero-content">
+          <div class="eyebrow hero-animate"><span class="eyebrow-mark"></span> APRENDIZAJE APLICADO · COMERCIO EXTERIOR</div>
+          <h1 class="hero-animate delay-1">Domina el comercio exterior <span>con herramientas reales.</span></h1>
+          <p class="hero-copy hero-animate delay-2">Explora conceptos, consulta recursos y analiza operaciones comerciales en un solo entorno de apoyo académico.</p>
+          <div class="actions hero-animate delay-2">
+            <a class="btn btn-gold" href="/#home">Explorar la plataforma <span aria-hidden="true">→</span></a>
+            <a class="btn btn-outline" href="#herramientas">Conocer las herramientas <span aria-hidden="true">↓</span></a>
+          </div>
+          <div class="hero-note hero-animate delay-3"><span class="note-icon" aria-hidden="true">✳</span><span>Una iniciativa digital pensada para estudiantes de Ingeniería Comercial.</span></div>
+        </div>
+
+        <div class="visual hero-animate delay-2" aria-label="Vista conceptual de la interfaz TradeLearn Chile">
+          <div class="visual-orbit orbit-a" aria-hidden="true"></div><div class="visual-orbit orbit-b" aria-hidden="true"></div>
+          <div class="float-label float-top"><span class="float-gem">✦</span> Aprende haciendo</div>
+          <div class="float-label float-bottom"><span class="signal"></span> Herramientas de comercio exterior</div>
+          <div class="product">
+            <div class="product-top">
+              <div class="product-brand"><span class="brand-mark" aria-hidden="true"></span><span>TradeLearn <b>Chile</b></span></div>
+              <div class="window-dots" aria-hidden="true"><i></i><i></i><i></i></div>
+            </div>
+            <div class="product-body">
+              <aside class="product-side">
+                <p class="side-caption">ESPACIO DE TRABAJO</p>
+                <div class="side-link active"><span class="side-ico">⌕</span> Aranceles</div>
+                <div class="side-link"><span class="side-ico">▦</span> Calculadora</div>
+                <div class="side-link"><span class="side-ico">◎</span> Incoterms</div>
+                <div class="side-separator"></div>
+                <p class="side-caption">CONSULTA</p>
+                <div class="side-link"><span class="side-ico">↗</span> Indicadores</div>
+                <div class="side-link"><span class="side-ico">▤</span> Documentos</div>
+                <p class="side-foot">Vista conceptual de la plataforma</p>
+              </aside>
+              <div class="product-main">
+                <div class="product-heading"><div><span class="overline">CENTRO DE HERRAMIENTAS</span><h2>Aprende. Analiza. Aplica.</h2></div><span class="preview-chip">VISTA PREVIA</span></div>
+                <div class="stat-grid">
+                  <div class="stat-card"><span class="stat-icon blue">⌕</span><span class="stat-label">Consulta</span><strong>Aranceles</strong><small>Información comercial</small></div>
+                  <div class="stat-card"><span class="stat-icon gold">▦</span><span class="stat-label">Calcula</span><strong>Costos Comex</strong><small>FOB · CIF · componentes</small></div>
+                </div>
+                <div class="path-card">
+                  <div class="path-heading"><div><span class="overline">RUTA DE APRENDIZAJE</span><strong>De la consulta al análisis</strong></div><span class="path-badge">✓ Explora</span></div>
+                  <div class="path-steps">
+                    <div class="path-step done"><span>⌕</span><b>Consultar</b></div><div class="path-line"></div>
+                    <div class="path-step done"><span>▦</span><b>Calcular</b></div><div class="path-line"></div>
+                    <div class="path-step"><span>✳</span><b>Comprender</b></div>
+                  </div>
+                </div>
+                <div class="product-foot"><span class="shield">◇</span><span>Recursos para acompañar tu formación académica</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="hero-ribbon"><div class="wrap ribbon-inner"><span>APRENDE CON CONTEXTO</span><span class="ribbon-divider"></span><span>ANALIZA CON PROPÓSITO</span><span class="ribbon-divider"></span><span>AVANZA CON CRITERIO</span></div></div>
+    </section>
+
+    <section class="intro">
+      <div class="wrap intro-inner">
+        <div class="intro-label"><span>TRADELEARN / 01</span>UN ENTORNO, DISTINTAS FORMAS DE APRENDER</div>
+        <p>Herramientas digitales para llevar los conceptos del comercio internacional <em>a ejercicios y decisiones concretas.</em></p>
+      </div>
+    </section>
+
+    <section class="section" id="beneficios">
+      <div class="wrap">
+        <div class="section-head reveal">
+          <div><div class="section-kicker"><span class="kicker-square"></span> POR QUÉ TRADELEARN</div><h2 class="section-title">Menos tiempo buscando.<br><span>Más tiempo aprendiendo.</span></h2></div>
+          <p>Una experiencia diseñada para ayudarte a organizar consultas, comprender operaciones y practicar con recursos relacionados con el comercio exterior.</p>
+        </div>
+        <div class="benefit-grid">
+          <article class="benefit-card reveal"><div class="card-top"><span>01 / ORGANIZACIÓN</span><span class="benefit-icon">▧</span></div><h3>Recursos en un mismo lugar</h3><p>Encuentra herramientas de consulta, cálculo y aprendizaje desde una misma experiencia digital.</p><div class="card-rule"><span></span></div></article>
+          <article class="benefit-card reveal"><div class="card-top"><span>02 / ANÁLISIS</span><span class="benefit-icon">＄</span></div><h3>Entiende los componentes del costo</h3><p>Relaciona valores y conceptos de una operación para abordar ejercicios con más contexto.</p><div class="card-rule"><span></span></div></article>
+          <article class="benefit-card reveal"><div class="card-top"><span>03 / APLICACIÓN</span><span class="benefit-icon">⇄</span></div><h3>Conecta la teoría con casos</h3><p>Complementa tus estudios con documentos, términos comerciales y recursos sobre acuerdos.</p><div class="card-rule"><span></span></div></article>
+          <article class="benefit-card reveal"><div class="card-top"><span>04 / DESARROLLO</span><span class="benefit-icon">↗</span></div><h3>Construye criterio profesional</h3><p>Familiarízate con conceptos y procesos presentes en el análisis del comercio internacional.</p><div class="card-rule"><span></span></div></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section tools-section" id="herramientas">
+      <div class="wrap">
+        <div class="section-head reveal">
+          <div><div class="section-kicker"><span class="kicker-square"></span> EXPLORA LA PLATAFORMA</div><h2 class="section-title">Las herramientas que<br><span>conectan teoría y práctica.</span></h2><div class="tool-count"><b>07</b> HERRAMIENTAS PARA EXPLORAR</div></div>
+          <p>Selecciona una herramienta para entrar al módulo correspondiente de la aplicación.</p>
+        </div>
+        <div class="tool-grid">
+          <a class="tool-card reveal" href="/#tariff"><div class="tool-top"><span class="tool-icon">⌕</span><span class="tool-number">01</span></div><span class="tool-category">Consulta comercial</span><h3>Buscador arancelario</h3><p>Explora fracciones arancelarias y revisa información disponible para tus ejercicios.</p><span class="tool-link">Abrir herramienta <span>→</span></span></a>
+          <a class="tool-card gold reveal" href="/#calculator"><div class="tool-top"><span class="tool-icon">▦</span><span class="tool-number">02</span></div><span class="tool-category">Cálculo y análisis</span><h3>Calculadora Comex</h3><p>Desglosa FOB, flete, seguro y costos asociados a una operación comercial.</p><span class="tool-link">Abrir herramienta <span>→</span></span></a>
+          <a class="tool-card reveal" href="/#breakeven"><div class="tool-top"><span class="tool-icon">◴</span><span class="tool-number">03</span></div><span class="tool-category">Cálculo y análisis</span><h3>Punto de equilibrio</h3><p>Relaciona costos, ingresos y volumen para estudiar la rentabilidad de un caso.</p><span class="tool-link">Abrir herramienta <span>→</span></span></a>
+          <a class="tool-card gold reveal" href="/#indicators"><div class="tool-top"><span class="tool-icon">↗</span><span class="tool-number">04</span></div><span class="tool-category">Cálculo y análisis</span><h3>Indicadores económicos</h3><p>Consulta indicadores disponibles para contextualizar tu análisis comercial.</p><span class="tool-link">Abrir herramienta <span>→</span></span></a>
+          <a class="tool-card gold reveal" href="/#documents"><div class="tool-top"><span class="tool-icon">▤</span><span class="tool-number">05</span></div><span class="tool-category">Conocimiento aplicado</span><h3>Guía de documentos</h3><p>Repasa documentos que pueden intervenir en importaciones y exportaciones.</p><span class="tool-link">Abrir herramienta <span>→</span></span></a>
+          <a class="tool-card reveal" href="/#incoterms"><div class="tool-top"><span class="tool-icon">⇄</span><span class="tool-number">06</span></div><span class="tool-category">Conocimiento aplicado</span><h3>Incoterms 2020</h3><p>Compara responsabilidades y transferencia de riesgos entre comprador y vendedor.</p><span class="tool-link">Abrir herramienta <span>→</span></span></a>
+          <a class="tool-card gold reveal" href="/#agreements"><div class="tool-top"><span class="tool-icon">◎</span><span class="tool-number">07</span></div><span class="tool-category">Consulta comercial</span><h3>Tratados de libre comercio</h3><p>Accede a recursos y enlaces relacionados con acuerdos comerciales de Chile.</p><span class="tool-link">Abrir herramienta <span>→</span></span></a>
+        </div>
+        <div class="tools-foot"><span aria-hidden="true">◇</span><span><b>Una nota importante:</b> utiliza la plataforma como apoyo académico y contrasta la información comercial con las fuentes oficiales pertinentes.</span></div>
+      </div>
+    </section>
+
+    <section class="section demo-section">
+      <div class="wrap demo-layout">
+        <div class="demo-copy reveal">
+          <div class="section-kicker"><span class="kicker-square"></span> UNA VISTA MÁS CERCANA</div>
+          <h2 class="section-title">Explora antes<br>de <span>entrar.</span></h2>
+          <p>Prueba una muestra interactiva de algunas herramientas. Esta vista sirve para conocer la experiencia; no consulta datos comerciales ni reemplaza los cálculos del módulo real.</p>
+          <div class="demo-checks"><div class="demo-check"><span class="check">✓</span><span>Interacción directa con las pestañas.</span></div><div class="demo-check"><span class="check">✓</span><span>Ejemplos identificados como demostrativos.</span></div><div class="demo-check"><span class="check">✓</span><span>Acceso al módulo real para profundizar.</span></div></div>
+        </div>
+        <div class="demo-window reveal">
+          <div class="demo-window-head"><div class="demo-window-brand"><span class="demo-mini-mark"><span></span></span> TradeLearn <b>Chile</b></div><span class="demo-tag">MODO DEMOSTRACIÓN</span></div>
+          <div class="demo-tabs" role="tablist" aria-label="Vistas de demostración">
+            <button class="demo-tab" id="tab-aranceles" role="tab" aria-selected="true" aria-controls="panel-demo" data-tab="aranceles">⌕ Aranceles</button>
+            <button class="demo-tab" id="tab-calculadora" role="tab" aria-selected="false" aria-controls="panel-demo" data-tab="calculadora">▦ Calculadora</button>
+            <button class="demo-tab" id="tab-incoterms" role="tab" aria-selected="false" aria-controls="panel-demo" data-tab="incoterms">⇄ Incoterms</button>
+          </div>
+          <div class="demo-panel" id="panel-demo" role="tabpanel" aria-labelledby="tab-aranceles" aria-live="polite">
+            <div class="panel-head"><div><span class="panel-eyebrow">CONSULTA COMERCIAL</span><h3>Buscador arancelario</h3></div><span class="panel-icon">⌕</span></div>
+            <label class="field-label" for="demo-code">Código o descripción (ejemplo)</label>
+            <div class="search-field"><span aria-hidden="true">⌕</span><input id="demo-code" type="text" value="8471.30.00" aria-describedby="demo-note"><span class="search-label">EJEMPLO</span></div>
+            <div class="demo-result"><div class="result-top"><span>FICHA ILUSTRATIVA</span><span class="result-status">DEMO</span></div><strong id="demo-code-value">8471.30.00</strong><p>La descripción y los derechos deben comprobarse en el módulo y en las fuentes oficiales correspondientes.</p></div>
+            <p class="demo-note" id="demo-note">Esta vista no ejecuta búsquedas ni valida códigos arancelarios.</p>
+            <a class="demo-open" id="demo-open" href="/#tariff">Abrir buscador real <span>↗</span></a>
+          </div>
+          <div class="demo-window-foot"><span>● Interfaz de demostración</span><span>Los módulos reales conservan su propia lógica</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="wrap">
+        <div class="section-head reveal"><div><div class="section-kicker"><span class="kicker-square"></span> DEL AULA AL ENTORNO PROFESIONAL</div><h2 class="section-title">Aprender también es<br><span>llevarlo a la práctica.</span></h2></div><p>TradeLearn Chile complementa tu proceso de aprendizaje; no sustituye las clases, la asesoría profesional ni la verificación de información oficial.</p></div>
+        <div class="journey-grid">
+          <article class="journey-card reveal"><span class="journey-num">01 / APRENDIZAJE</span><span class="journey-icon">▤</span><h3>Durante el aprendizaje</h3><p>Aclara conceptos, consulta recursos y explora ejemplos relacionados con el comercio exterior.</p></article>
+          <article class="journey-card reveal"><span class="journey-num">02 / APLICACIÓN</span><span class="journey-icon">▦</span><h3>En trabajos y proyectos</h3><p>Organiza un análisis, estima componentes de costos y revisa temas relevantes para un caso.</p></article>
+          <article class="journey-card reveal"><span class="journey-num">03 / DESARROLLO</span><span class="journey-icon">↗</span><h3>En tu preparación laboral</h3><p>Reconoce terminología, herramientas y procesos presentes en tareas comerciales.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section how-section" id="como-empezar">
+      <div class="wrap how-layout">
+        <div class="reveal"><div class="section-kicker"><span class="kicker-square"></span> EMPIEZA EN TRES PASOS</div><h2 class="section-title">Simple para comenzar.<br><span>Útil para explorar.</span></h2><p class="how-copy">Accede directamente a las herramientas disponibles y elige la que corresponda a tu objetivo de aprendizaje.</p><a class="btn btn-gold" href="/#home">Entrar a TradeLearn <span>→</span></a></div>
+        <div class="steps">
+          <div class="step reveal"><span class="step-num">01</span><div><h3>Explora las herramientas</h3><p>Conoce las opciones disponibles en la plataforma.</p></div><span class="step-symbol">↘</span></div>
+          <div class="step reveal"><span class="step-num">02</span><div><h3>Elige tu módulo</h3><p>Selecciona la consulta, cálculo o recurso que necesitas.</p></div><span class="step-symbol">↘</span></div>
+          <div class="step reveal"><span class="step-num">03</span><div><h3>Analiza y aprende</h3><p>Utiliza los resultados como apoyo para tu actividad académica.</p></div><span class="step-symbol">✓</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="final-cta">
+      <div class="cta-pattern" aria-hidden="true"></div>
+      <div class="wrap cta-inner reveal">
+        <div class="cta-label"><span class="brand-mark" aria-hidden="true"></span> TRADELEARN CHILE · APOYO ACADÉMICO</div>
+        <h2>Lleva el comercio exterior<br><span>de la teoría a la práctica.</span></h2>
+        <p>Explora herramientas y recursos que acompañan tu formación en comercio internacional.</p>
+        <div class="actions"><a class="btn btn-gold" href="/#home">Explorar la plataforma <span>→</span></a><a class="btn btn-outline" href="#herramientas">Volver a las herramientas <span>↓</span></a></div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="wrap footer-inner">
+      <div><a class="brand" href="#inicio"><span class="brand-mark" aria-hidden="true"></span><span class="brand-word">TradeLearn <b>Chile</b></span></a><p class="footer-desc">Un entorno digital de apoyo académico para explorar el comercio exterior.</p></div>
+      <nav class="footer-links" aria-label="Enlaces del pie de página"><a href="#herramientas">Herramientas</a><a href="#beneficios">Beneficios</a><a href="/#home">Acceder ↗</a></nav>
+      <div class="footer-bottom"><span>TradeLearn Chile · Proyecto orientado a estudiantes de Ingeniería Comercial.</span><span>Consulta siempre las fuentes oficiales aplicables.</span></div>
+    </div>
+  </footer>
+
+  <script>
+    (function () {
+      var body = document.body;
+      var menuButton = document.querySelector('.menu-toggle');
+      var nav = document.querySelector('.nav-links');
+      menuButton.addEventListener('click', function () {
+        var isOpen = nav.classList.toggle('open');
+        menuButton.setAttribute('aria-expanded', String(isOpen));
+        menuButton.setAttribute('aria-label', isOpen ? 'Cerrar menú' : 'Abrir menú');
+        menuButton.textContent = isOpen ? '×' : '☰';
+      });
+      nav.querySelectorAll('a').forEach(function (link) {
+        link.addEventListener('click', function () {
+          nav.classList.remove('open');
+          menuButton.setAttribute('aria-expanded', 'false');
+          menuButton.setAttribute('aria-label', 'Abrir menú');
+          menuButton.textContent = '☰';
+        });
+      });
+
+      var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      var revealItems = document.querySelectorAll('.reveal');
+      if (reduceMotion || !('IntersectionObserver' in window)) {
+        revealItems.forEach(function (el) { el.classList.add('visible'); });
+      } else {
+        var observer = new IntersectionObserver(function (entries) {
+          entries.forEach(function (entry) {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('visible');
+              observer.unobserve(entry.target);
+            }
+          });
+        }, { threshold: 0.12, rootMargin: '0px 0px -35px 0px' });
+        revealItems.forEach(function (el) { observer.observe(el); });
+      }
+
+      var cursor = document.querySelector('.cursor');
+      var finePointer = window.matchMedia('(pointer: fine)').matches;
+      if (finePointer && !reduceMotion) {
+        body.classList.add('cursor-enabled');
+        document.addEventListener('pointermove', function (event) {
+          cursor.style.left = event.clientX + 'px';
+          cursor.style.top = event.clientY + 'px';
+          cursor.classList.add('visible');
+          var target = event.target;
+          cursor.classList.toggle('hover', Boolean(target.closest('a,button')));
+        });
+        document.addEventListener('pointerleave', function () { cursor.classList.remove('visible'); });
+      }
+
+      var input = document.getElementById('demo-code');
+      var codeValue = document.getElementById('demo-code-value');
+      input.addEventListener('input', function () {
+        codeValue.textContent = input.value.trim() || 'Escribe un código de ejemplo';
+      });
+
+      var tabs = document.querySelectorAll('.demo-tab');
+      var panel = document.getElementById('panel-demo');
+      var openLink = document.getElementById('demo-open');
+      var demoViews = {
+        aranceles: {
+          eyebrow: 'CONSULTA COMERCIAL',
+          title: 'Buscador arancelario',
+          icon: '⌕',
+          html: '<label class="field-label" for="demo-code">Código o descripción (ejemplo)</label><div class="search-field"><span aria-hidden="true">⌕</span><input id="demo-code" type="text" value="8471.30.00" aria-describedby="demo-note"><span class="search-label">EJEMPLO</span></div><div class="demo-result"><div class="result-top"><span>FICHA ILUSTRATIVA</span><span class="result-status">DEMO</span></div><strong id="demo-code-value">8471.30.00</strong><p>La descripción y los derechos deben comprobarse en el módulo y en las fuentes oficiales correspondientes.</p></div><p class="demo-note" id="demo-note">Esta vista no ejecuta búsquedas ni valida códigos arancelarios.</p>',
+          link: '/#tariff', linkText: 'Abrir buscador real'
+        },
+        calculadora: {
+          eyebrow: 'CÁLCULO ILUSTRATIVO',
+          title: 'Componentes del valor CIF',
+          icon: '▦',
+          html: '<p class="calc-copy">Ajusta los valores de muestra para ver cómo se suman en este ejemplo simple.</p><div class="calc-fields"><label>FOB (USD)<input type="number" min="0" id="demo-fob" value="5000"></label><label>Flete (USD)<input type="number" min="0" id="demo-freight" value="450"></label><label>Seguro (USD)<input type="number" min="0" id="demo-insurance" value="50"></label></div><div class="cif-result"><span>FOB + flete + seguro</span><strong id="demo-cif">$5.500</strong><span class="result-hint">✓ Resultado demostrativo</span></div><p class="demo-note">No incluye aranceles, IVA ni otros cargos; no representa un cálculo aduanero completo.</p>',
+          link: '/#calculator', linkText: 'Abrir Calculadora Comex'
+        },
+        incoterms: {
+          eyebrow: 'CONOCIMIENTO APLICADO',
+          title: 'Responsabilidades comerciales',
+          icon: '⇄',
+          html: '<p class="calc-copy">Ejemplos de términos que puedes explorar en el módulo de Incoterms 2020.</p><div class="incoterm-row"><span class="incoterm-code">EXW</span><div><strong>Ex Works</strong><p>El vendedor pone la mercancía a disposición en el lugar acordado.</p></div><span class="incoterm-index">01</span></div><div class="incoterm-row"><span class="incoterm-code">FOB</span><div><strong>Free On Board</strong><p>Entrega vinculada a la mercancía a bordo del buque.</p></div><span class="incoterm-index">02</span></div><div class="incoterm-row"><span class="incoterm-code">CIF</span><div><strong>Cost, Insurance & Freight</strong><p>Incluye coste, seguro y flete hasta el puerto convenido.</p></div><span class="incoterm-index">03</span></div><p class="demo-note">Resumen orientativo. Revisa la regla, el lugar convenido y la transferencia del riesgo en su contexto.</p>',
+          link: '/#incoterms', linkText: 'Explorar los Incoterms'
+        }
+      };
+      function formatUSD(value) {
+        return new Intl.NumberFormat('es-CL', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(value);
+      }
+      function updateCif() {
+        var fob = Math.max(0, Number(document.getElementById('demo-fob').value) || 0);
+        var freight = Math.max(0, Number(document.getElementById('demo-freight').value) || 0);
+        var insurance = Math.max(0, Number(document.getElementById('demo-insurance').value) || 0);
+        document.getElementById('demo-cif').textContent = formatUSD(fob + freight + insurance);
+      }
+      function selectTab(name) {
+        var data = demoViews[name];
+        tabs.forEach(function (tab) {
+          var active = tab.getAttribute('data-tab') === name;
+          tab.setAttribute('aria-selected', String(active));
+          tab.tabIndex = active ? 0 : -1;
+        });
+        panel.setAttribute('aria-labelledby', 'tab-' + name);
+        panel.innerHTML = '<div class="panel-head"><div><span class="panel-eyebrow">' + data.eyebrow + '</span><h3>' + data.title + '</h3></div><span class="panel-icon">' + data.icon + '</span></div>' + data.html + '<a class="demo-open" id="demo-open" href="' + data.link + '">' + data.linkText + ' <span>↗</span></a>';
+        openLink = document.getElementById('demo-open');
+        if (name === 'aranceles') {
+          var newInput = document.getElementById('demo-code');
+          var newValue = document.getElementById('demo-code-value');
+          newInput.addEventListener('input', function () { newValue.textContent = newInput.value.trim() || 'Escribe un código de ejemplo'; });
+        }
+        if (name === 'calculadora') {
+          ['demo-fob', 'demo-freight', 'demo-insurance'].forEach(function (id) { document.getElementById(id).addEventListener('input', updateCif); });
+          updateCif();
+        }
+      }
+      tabs.forEach(function (tab) {
+        tab.addEventListener('click', function () { selectTab(tab.getAttribute('data-tab')); });
+        tab.addEventListener('keydown', function (event) {
+          if (event.key === 'ArrowRight' || event.key === 'ArrowLeft') {
+            event.preventDefault();
+            var list = Array.from(tabs);
+            var index = list.indexOf(tab);
+            var next = event.key === 'ArrowRight' ? (index + 1) % list.length : (index - 1 + list.length) % list.length;
+            list[next].focus();
+            selectTab(list[next].getAttribute('data-tab'));
+          }
+        });
+      });
+    })();
+  </script>
+</body>
+</html>
